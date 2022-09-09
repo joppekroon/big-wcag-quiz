@@ -1,2 +1,9 @@
 # big-wcag-quiz
-Created with CodeSandbox
+
+For my own personal use, i.e. it works for me, not necessarily for you and that's okay (for now).
+
+
+
+
+
+

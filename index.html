@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Big WCAG Quiz</title>
+
+    <link rel="stylesheet" href="./index.css" />
+
+    <script type="module" src="./setup.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"
+    ></script>
+  </head>
+  <body>
+    <svg style="display: none;">
+      <defs>
+        <symbol id="heart" viewbox="0 0 80 80">
+          <path
+            d="
+                  M 40,75
+                  l -30,-30
+                  c -20,-20
+                    0,-55
+                    30,-30
+                  c 30, -25
+                    50, 10
+                    30, 30
+                  z"
+          />
+        </symbol>
+      </defs>
+    </svg>
+
+    <div class="side-container">
+      <h1>Big WCAG Quiz</h1>
+
+      <form id="setup-form" class="setup-form">
+        <label for="principles">Principle</label>
+        <select id="principles">
+          <option value="0">All</option>
+          <option value="1">Perceivable</option>
+          <option value="2">Operable</option>
+          <option value="3">Understandable</option>
+          <option value="4">Robust</option>
+        </select>
+
+        <label for="levels">Level</label>
+        <select id="levels">
+          <option value="AAA">All</option>
+          <option value="AA">A + AA</option>
+          <option value="A">A</option>
+        </select>
+
+        <button type="submit" id="setup-submit">Start</button>
+      </form>
+
+      <form id="answer-form" class="answer-form hide">
+        <div id="question-container" class="question">
+          <div class="preamble">Where is:</div>
+          <div>
+            <span id="question"></span><span class="questionmark">?</span>
+          </div>
+        </div>
+        <label id="answer-label" for="answer-field">Number</label>
+        <input
+          aria-labelledby="question-container answer-label"
+          id="answer-field"
+          inputmode="numeric"
+          pattern="\d.\d|\d.\d.\d|\d.\d.\d\d"
+          type="text"
+        />
+        <button type="submit" id="answer-submit">Check</button>
+      </form>
+      <div id="lives" class="lives hide" data-lives="5">
+        <svg class="life"><use href="#heart" /></svg>
+        <svg class="life"><use href="#heart" /></svg>
+        <svg class="life"><use href="#heart" /></svg>
+        <svg class="life"><use href="#heart" /></svg>
+        <svg class="life"><use href="#heart" /></svg>
+      </div>
+      <form id="restart-form" class="restart-form hide">
+        <button type="reset" id="reset">Restart</button>
+      </form>
+    </div>
+
+    <div class="main-container">
+      <main id="main">
+        <div class="cell p hide" data-p="1">
+          <span class="name">Perceivable</span>
+          <span class="number">1</span>
+        </div>
+
+        <div class="cell g hide" data-p="1" data-g="1">
+          <div class="name">Text Alternatives</div>
+          <div class="number">1.1</div>
+        </div>
+        <div class="cell g hide" data-p="1" data-g="2">
+          <div class="name">Time-based Media</div>
+          <div class="number">1.2</div>
+        </div>
+        <div class="cell g hide" data-p="1" data-g="3">
+          <div class="name">Adaptable</div>
+          <div class="number">1.3</div>
+        </div>
+        <div class="cell g hide" data-p="1" data-g="4">
+          <div class="name">Distinguishable</div>
+          <div class="number">1.4</div>
+        </div>
+
+        <div class="cell sc hide" data-p="1" data-g="1" data-sc="1" data-l="A">
+          <div class="name">Non-text Content</div>
+          <div class="level">A</div>
+          <div class="number">1.1.1</div>
+        </div>
+
+        <div class="cell sc hide" data-p="1" data-g="2" data-sc="1" data-l="A">
+          <div class="name">Audio-only and Video-only (Prerecorded)</div>
+          <div class="level">A</div>
+          <div class="number">1.2.1</div>
+        </div>
+        <div class="cell sc hide" data-p="1" data-g="2" data-sc="2" data-l="A">
+          <div class="name">Captions (Prerecorded)</div>
+          <div class="level">A</div>
+          <div class="number">1.2.2</div>
+        </div>
+        <div class="cell sc hide" data-p="1" data-g="2" data-sc="3" data-l="A">
+          <div class="name">
+            Audio Description or Media Alternative (Prerecorded)
+          </div>
+          <div class="level">A</div>
+          <div class="number">1.2.3</div>
+        </div>
+        <div class="cell sc hide" data-p="1" data-g="2" data-sc="4" data-l="AA">
+          <div class="name">
+            Captions (Live)
+          </div>
+          <div class="level">AA</div>
+          <div class="number">1.2.4</div>
+        </div>
+        <div class="cell sc hide" data-p="1" data-g="2" data-sc="5" data-l="AA">
+          <div class="name">Audio Description (Prerecorded)</div>
+          <div class="level">AA</div>
+          <div class="number">1.2.5</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="1"
+          data-g="2"
+          data-sc="6"
+          data-l="AAA"
+        >
+          <div class="name">Sign Language (Prerecorded)</div>
+          <div class="level">AAA</div>
+          <div class="number">1.2.6</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="1"
+          data-g="2"
+          data-sc="7"
+          data-l="AAA"
+        >
+          <div class="name">Extended Audio Description (Prerecorded)</div>
+          <div class="level">AAA</div>
+          <div class="number">1.2.7</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="1"
+          data-g="2"
+          data-sc="8"
+          data-l="AAA"
+        >
+          <div class="name">Media Alternative (Prerecorded)</div>
+          <div class="level">AAA</div>
+          <div class="number">1.2.8</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="1"
+          data-g="2"
+          data-sc="9"
+          data-l="AAA"
+        >
+          <div class="name">Audio-only (Live)</div>
+          <div class="level">AAA</div>
+          <div class="number">1.2.9</div>
+        </div>
+
+        <div class="cell sc hide" data-p="1" data-g="3" data-sc="1" data-l="A">
+          <div class="name">
+            Info and Relationships
+          </div>
+          <div class="level">A</div>
+          <div class="number">1.3.1</div>
+        </div>
+        <div class="cell sc hide" data-p="1" data-g="3" data-sc="2" data-l="A">
+          <div class="name">Meaningful Sequence</div>
+          <div class="level">A</div>
+          <div class="number">1.3.2</div>
+        </div>
+        <div class="cell sc hide" data-p="1" data-g="3" data-sc="3" data-l="A">
+          <div class="name">Sensory Characteristics</div>
+          <div class="level">A</div>
+          <div class="number">1.3.3</div>
+        </div>
+        <div class="cell sc hide" data-p="1" data-g="3" data-sc="4" data-l="AA">
+          <div class="name">Orientation</div>
+          <div class="level">AA</div>
+          <div class="number">1.3.4</div>
+        </div>
+        <div class="cell sc hide" data-p="1" data-g="3" data-sc="5" data-l="AA">
+          <div class="name">Identify Input Purpose</div>
+          <div class="level">AA</div>
+          <div class="number">1.3.5</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="1"
+          data-g="3"
+          data-sc="6"
+          data-l="AAA"
+        >
+          <div class="name">Identify Purpose</div>
+          <div class="level">AAA</div>
+          <div class="number">1.3.6</div>
+        </div>
+
+        <div class="cell sc hide" data-p="1" data-g="4" data-sc="1" data-l="A">
+          <div class="name">Use of Color</div>
+          <div class="level">A</div>
+          <div class="number">1.4.1</div>
+        </div>
+        <div class="cell sc hide" data-p="1" data-g="4" data-sc="2" data-l="A">
+          <div class="name">Audio Control</div>
+          <div class="level">A</div>
+          <div class="number">1.4.2</div>
+        </div>
+        <div class="cell sc hide" data-p="1" data-g="4" data-sc="3" data-l="AA">
+          <div class="name">Contrast (Minimum)</div>
+          <div class="level">AA</div>
+          <div class="number">1.4.3</div>
+        </div>
+        <div class="cell sc hide" data-p="1" data-g="4" data-sc="4" data-l="AA">
+          <div class="name">Resize text</div>
+          <div class="level">AA</div>
+          <div class="number">1.4.4</div>
+        </div>
+        <div class="cell sc hide" data-p="1" data-g="4" data-sc="5" data-l="AA">
+          <div class="name">Images of Text</div>
+          <div class="level">AA</div>
+          <div class="number">1.4.5</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="1"
+          data-g="4"
+          data-sc="6"
+          data-l="AAA"
+        >
+          <div class="name">Contrast (Enhanced)</div>
+          <div class="level">AAA</div>
+          <div class="number">1.4.6</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="1"
+          data-g="4"
+          data-sc="7"
+          data-l="AAA"
+        >
+          <div class="name">Low or No Background Audio</div>
+          <div class="level">AAA</div>
+          <div class="number">1.4.7</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="1"
+          data-g="4"
+          data-sc="8"
+          data-l="AAA"
+        >
+          <div class="name">Visual Presentation</div>
+          <div class="level">AAA</div>
+          <div class="number">1.4.8</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="1"
+          data-g="4"
+          data-sc="9"
+          data-l="AAA"
+        >
+          <div class="name">Images of Text (No Exception)</div>
+          <div class="level">AAA</div>
+          <div class="number">1.4.9</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="1"
+          data-g="4"
+          data-sc="10"
+          data-l="AA"
+        >
+          <div class="name">Reflow</div>
+          <div class="level">AA</div>
+          <div class="number">1.4.10</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="1"
+          data-g="4"
+          data-sc="11"
+          data-l="AA"
+        >
+          <div class="name">Non-text Contrast</div>
+          <div class="level">AA</div>
+          <div class="number">1.4.11</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="1"
+          data-g="4"
+          data-sc="12"
+          data-l="AA"
+        >
+          <div class="name">Text Spacing</div>
+          <div class="level">AA</div>
+          <div class="number">1.4.12</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="1"
+          data-g="4"
+          data-sc="13"
+          data-l="AA"
+        >
+          <div class="name">Content on Hover or Focus</div>
+          <div class="level">AA</div>
+          <div class="number">1.4.13</div>
+        </div>
+
+        <div class="cell p hide" data-p="2">
+          <span class="name">Operable</span>
+          <span class="number">2</span>
+        </div>
+
+        <div class="cell g hide" data-p="2" data-g="1">
+          <div class="name">Keyboard Accessible</div>
+          <div class="number">2.1</div>
+        </div>
+        <div class="cell g hide" data-p="2" data-g="2">
+          <div class="name">Enough Time</div>
+          <div class="number">2.2</div>
+        </div>
+        <div class="cell g hide" data-p="2" data-g="3">
+          <div class="name">Seizures and Physical Reactions</div>
+          <div class="number">2.3</div>
+        </div>
+        <div class="cell g hide" data-p="2" data-g="4">
+          <div class="name">Navigable</div>
+          <div class="number">2.4</div>
+        </div>
+        <div class="cell g hide" data-p="2" data-g="5">
+          <div class="name">Input Modalities</div>
+          <div class="number">2.5</div>
+        </div>
+
+        <div class="cell sc hide" data-p="2" data-g="1" data-sc="1" data-l="A">
+          <div class="name">Keyboard</div>
+          <div class="level">A</div>
+          <div class="number">2.1.1</div>
+        </div>
+        <div class="cell sc hide" data-p="2" data-g="1" data-sc="2" data-l="A">
+          <div class="name">No Keyboard Trap</div>
+          <div class="level">A</div>
+          <div class="number">2.1.2</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="2"
+          data-g="1"
+          data-sc="3"
+          data-l="AAA"
+        >
+          <div class="name">Keyboard (No Exception)</div>
+          <div class="level">AAA</div>
+          <div class="number">2.1.3</div>
+        </div>
+        <div class="cell sc hide" data-p="2" data-g="1" data-sc="4" data-l="A">
+          <div class="name">Character Key Shortcuts</div>
+          <div class="level">A</div>
+          <div class="number">2.1.4</div>
+        </div>
+
+        <div class="cell sc hide" data-p="2" data-g="2" data-sc="1" data-l="A">
+          <div class="name">Timing Adjustable</div>
+          <div class="level">A</div>
+          <div class="number">2.2.1</div>
+        </div>
+        <div class="cell sc hide" data-p="2" data-g="2" data-sc="2" data-l="A">
+          <div class="name">Pause, Stop, Hide</div>
+          <div class="level">A</div>
+          <div class="number">2.2.2</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="2"
+          data-g="2"
+          data-sc="3"
+          data-l="AAA"
+        >
+          <div class="name">No Timing</div>
+          <div class="level">AAA</div>
+          <div class="number">2.2.3</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="2"
+          data-g="2"
+          data-sc="4"
+          data-l="AAA"
+        >
+          <div class="name">Interruptions</div>
+          <div class="level">AAA</div>
+          <div class="number">2.2.4</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="2"
+          data-g="2"
+          data-sc="5"
+          data-l="AAA"
+        >
+          <div class="name">Re-authenticating</div>
+          <div class="level">AAA</div>
+          <div class="number">2.2.5</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="2"
+          data-g="2"
+          data-sc="6"
+          data-l="AAA"
+        >
+          <div class="name">Timeouts</div>
+          <div class="level">AAA</div>
+          <div class="number">2.2.6</div>
+        </div>
+
+        <div class="cell sc hide" data-p="2" data-g="3" data-sc="1" data-l="A">
+          <div class="name">Three Flashes or Below Threshold</div>
+          <div class="level">A</div>
+          <div class="number">2.3.1</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="2"
+          data-g="3"
+          data-sc="2"
+          data-l="AAA"
+        >
+          <div class="name">Three Flashes</div>
+          <div class="level">AAA</div>
+          <div class="number">2.3.2</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="2"
+          data-g="3"
+          data-sc="3"
+          data-l="AAA"
+        >
+          <div class="name">Animation from Interactions</div>
+          <div class="level">AAA</div>
+          <div class="number">2.3.3</div>
+        </div>
+
+        <div class="cell sc hide" data-p="2" data-g="4" data-sc="1" data-l="A">
+          <div class="name">Bypass Blocks</div>
+          <div class="level">A</div>
+          <div class="number">2.4.1</div>
+        </div>
+        <div class="cell sc hide" data-p="2" data-g="4" data-sc="2" data-l="A">
+          <div class="name">Page Titled</div>
+          <div class="level">A</div>
+          <div class="number">2.4.2</div>
+        </div>
+        <div class="cell sc hide" data-p="2" data-g="4" data-sc="3" data-l="A">
+          <div class="name">Focus Order</div>
+          <div class="level">A</div>
+          <div class="number">2.4.3</div>
+        </div>
+        <div class="cell sc hide" data-p="2" data-g="4" data-sc="4" data-l="A">
+          <div class="name">Link Purpose (In Context)</div>
+          <div class="level">A</div>
+          <div class="number">2.4.4</div>
+        </div>
+        <div class="cell sc hide" data-p="2" data-g="4" data-sc="5" data-l="AA">
+          <div class="name">Multiple Ways</div>
+          <div class="level">AA</div>
+          <div class="number">2.4.5</div>
+        </div>
+        <div class="cell sc hide" data-p="2" data-g="4" data-sc="6" data-l="AA">
+          <div class="name">Headings and Labels</div>
+          <div class="level">AA</div>
+          <div class="number">2.4.6</div>
+        </div>
+        <div class="cell sc hide" data-p="2" data-g="4" data-sc="7" data-l="AA">
+          <div class="name">Focus Visible</div>
+          <div class="level">AA</div>
+          <div class="number">2.4.7</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="2"
+          data-g="4"
+          data-sc="8"
+          data-l="AAA"
+        >
+          <div class="name">Location</div>
+          <div class="level">AAA</div>
+          <div class="number">2.4.8</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="2"
+          data-g="4"
+          data-sc="9"
+          data-l="AAA"
+        >
+          <div class="name">Link Purpose (Link Only)</div>
+          <div class="level">AAA</div>
+          <div class="number">2.4.9</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="2"
+          data-g="4"
+          data-sc="10"
+          data-l="AAA"
+        >
+          <div class="name">Section Headings</div>
+          <div class="level">AAA</div>
+          <div class="number">2.4.10</div>
+        </div>
+
+        <div class="cell sc hide" data-p="2" data-g="5" data-sc="1" data-l="A">
+          <div class="name">Pointer Gestures</div>
+          <div class="level">A</div>
+          <div class="number">2.5.1</div>
+        </div>
+        <div class="cell sc hide" data-p="2" data-g="5" data-sc="2" data-l="A">
+          <div class="name">Pointer Cancellation</div>
+          <div class="level">A</div>
+          <div class="number">2.5.2</div>
+        </div>
+        <div class="cell sc hide" data-p="2" data-g="5" data-sc="3" data-l="A">
+          <div class="name">Label in Name</div>
+          <div class="level">A</div>
+          <div class="number">2.5.3</div>
+        </div>
+        <div class="cell sc hide" data-p="2" data-g="5" data-sc="4" data-l="A">
+          <div class="name">Motion Actuation</div>
+          <div class="level">A</div>
+          <div class="number">2.5.4</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="2"
+          data-g="5"
+          data-sc="5"
+          data-l="AAA"
+        >
+          <div class="name">Target Size</div>
+          <div class="level">AAA</div>
+          <div class="number">2.5.5</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="2"
+          data-g="5"
+          data-sc="6"
+          data-l="AAA"
+        >
+          <div class="name">Concurrent Input Mechanisms</div>
+          <div class="level">AAA</div>
+          <div class="number">2.5.6</div>
+        </div>
+
+        <div class="cell p hide" data-p="3">
+          <span class="name">Understandable</span>
+          <span class="number">3</span>
+        </div>
+
+        <div class="cell g hide" data-p="3" data-g="1">
+          <div class="name">Readable</div>
+          <div class="number">3.1</div>
+        </div>
+        <div class="cell g hide" data-p="3" data-g="2">
+          <div class="name">Predictable</div>
+          <div class="number">3.2</div>
+        </div>
+        <div class="cell g hide" data-p="3" data-g="3">
+          <div class="name">Input Assistance</div>
+          <div class="number">3.3</div>
+        </div>
+
+        <div class="cell sc hide" data-p="3" data-g="1" data-sc="1" data-l="A">
+          <div class="name">Language of Page</div>
+          <div class="level">A</div>
+          <div class="number">3.1.1</div>
+        </div>
+        <div class="cell sc hide" data-p="3" data-g="1" data-sc="2" data-l="AA">
+          <div class="name">Language of Parts</div>
+          <div class="level">AA</div>
+          <div class="number">3.1.2</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="3"
+          data-g="1"
+          data-sc="3"
+          data-l="AAA"
+        >
+          <div class="name">Unusual Words</div>
+          <div class="level">AAA</div>
+          <div class="number">3.1.3</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="3"
+          data-g="1"
+          data-sc="4"
+          data-l="AAA"
+        >
+          <div class="name">Abbreviations</div>
+          <div class="level">AAA</div>
+          <div class="number">3.1.4</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="3"
+          data-g="1"
+          data-sc="5"
+          data-l="AAA"
+        >
+          <div class="name">Reading Level</div>
+          <div class="level">AAA</div>
+          <div class="number">3.1.5</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="3"
+          data-g="1"
+          data-sc="6"
+          data-l="AAA"
+        >
+          <div class="name">Pronunciation</div>
+          <div class="level">AAA</div>
+          <div class="number">3.1.6</div>
+        </div>
+
+        <div class="cell sc hide" data-p="3" data-g="2" data-sc="1" data-l="A">
+          <div class="name">On Focus</div>
+          <div class="level">A</div>
+          <div class="number">3.2.1</div>
+        </div>
+        <div class="cell sc hide" data-p="3" data-g="2" data-sc="2" data-l="A">
+          <div class="name">On Input</div>
+          <div class="level">A</div>
+          <div class="number">3.2.2</div>
+        </div>
+        <div class="cell sc hide" data-p="3" data-g="2" data-sc="3" data-l="AA">
+          <div class="name">Consistent Navigation</div>
+          <div class="level">AA</div>
+          <div class="number">3.2.3</div>
+        </div>
+        <div class="cell sc hide" data-p="3" data-g="2" data-sc="4" data-l="AA">
+          <div class="name">Consistent Identification</div>
+          <div class="level">AA</div>
+          <div class="number">3.2.4</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="3"
+          data-g="2"
+          data-sc="5"
+          data-l="AAA"
+        >
+          <div class="name">Change on Request</div>
+          <div class="level">AAA</div>
+          <div class="number">3.2.5</div>
+        </div>
+
+        <div class="cell sc hide" data-p="3" data-g="3" data-sc="1" data-l="A">
+          <div class="name">Error Identification</div>
+          <div class="level">A</div>
+          <div class="number">3.3.1</div>
+        </div>
+        <div class="cell sc hide" data-p="3" data-g="3" data-sc="2" data-l="A">
+          <div class="name">Labels or Instructions</div>
+          <div class="level">A</div>
+          <div class="number">3.3.2</div>
+        </div>
+        <div class="cell sc hide" data-p="3" data-g="3" data-sc="3" data-l="AA">
+          <div class="name">Error Suggestion</div>
+          <div class="level">AA</div>
+          <div class="number">3.3.3</div>
+        </div>
+        <div class="cell sc hide" data-p="3" data-g="3" data-sc="4" data-l="AA">
+          <div class="name">Error Prevention (Legal, Financial, Data)</div>
+          <div class="level">AA</div>
+          <div class="number">3.3.4</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="3"
+          data-g="3"
+          data-sc="5"
+          data-l="AAA"
+        >
+          <div class="name">Help</div>
+          <div class="level">AAA</div>
+          <div class="number">3.3.5</div>
+        </div>
+        <div
+          class="cell sc hide"
+          data-p="3"
+          data-g="3"
+          data-sc="6"
+          data-l="AAA"
+        >
+          <div class="name">Error Prevention (All)</div>
+          <div class="level">AAA</div>
+          <div class="number">3.3.6</div>
+        </div>
+
+        <div class="cell p hide" data-p="4">
+          <span class="name">Robust</span>
+          <span class="number">4</span>
+        </div>
+
+        <div class="cell g hide" data-p="4" data-g="1">
+          <div class="name">Compatible</div>
+          <div class="number">4.1</div>
+        </div>
+
+        <div class="cell sc hide" data-p="4" data-g="1" data-sc="1" data-l="A">
+          <div class="name">Parsing</div>
+          <div class="level">A</div>
+          <div class="number">4.1.1</div>
+        </div>
+        <div class="cell sc hide" data-p="4" data-g="1" data-sc="2" data-l="A">
+          <div class="name">Name, Role, Value</div>
+          <div class="level">A</div>
+          <div class="number">4.1.2</div>
+        </div>
+        <div class="cell sc hide" data-p="4" data-g="1" data-sc="3" data-l="AA">
+          <div class="name">Status Messages</div>
+          <div class="level">AA</div>
+          <div class="number">4.1.3</div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

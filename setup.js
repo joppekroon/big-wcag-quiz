@@ -120,7 +120,7 @@ setupButton.addEventListener("click", (event) => {
     drawPrinciple(4, levels, quizGuidelines, 15);
   }
 
-  questions.shuffle(principles, levels);
+  questions.shuffle(principles, levels, quizGuidelines);
 
   setupForm.classList.add("hide");
 

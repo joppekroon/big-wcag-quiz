@@ -193,8 +193,8 @@ main {
 }
 
 .cell.g {
-  --clr: mediumseagreen;
-  --text-clr: black;
+  --clr: brown;
+  --text-clr: white;
 }
 .cell.sc[data-l="A"] {
   --clr: cornflowerblue;

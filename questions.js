@@ -5,13 +5,20 @@ export class Questions {
   #questions = [];
   #q = 0;
 
-  shuffle(principles, levels) {
-    const gs = guidelines.filter((g) => principles.includes(g.principle));
-    const scs = criteria.filter(
+    /**
+     * @param {Array.<number>} principles
+     * @param {Array.<string>} levels
+     * @param {boolean} quizGuidelines
+     */
+  shuffle(principles, levels, quizGuidelines) {
+    let array = [];
+      
+    if (quizGuidelines) {
+        array.push(...guidelines.filter((g) => principles.includes(g.principle)));
+    }
+    array.push(...criteria.filter(
       (sc) => principles.includes(sc.principle) && levels.includes(sc.level)
-    );
-
-    const array = [...gs, ...scs];
+    ));
 
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));

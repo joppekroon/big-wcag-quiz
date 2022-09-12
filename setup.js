@@ -8,6 +8,7 @@ const setupForm = document.querySelector("#setup-form");
 const setupButton = document.querySelector("#setup-submit");
 const principlesSelect = document.querySelector("#principles");
 const levelsSelect = document.querySelector("#levels");
+const quizGuidelinesCheck = document.querySelector("#quiz-guidelines");
 
 const answerForm = document.querySelector("#answer-form");
 const answerButton = document.querySelector("#answer-submit");
@@ -19,7 +20,13 @@ const livesIndicator = document.querySelector("#lives");
 const restartForm = document.querySelector("#restart-form");
 const restartButton = document.querySelector("#reset");
 
-const drawPrinciple = (principle, levels, columnOffset = 0) => {
+/**
+ * @param {number} principle 
+ * @param {Array.<string>} levels
+ * @param {boolean} quizGuidelines
+ * @param {number} columnOffset
+ */
+const drawPrinciple = (principle, levels, quizGuidelines, columnOffset = 0) => {
   const principleCell = document.querySelector(
     `.cell.p[data-p="${principle}"]`
   );
@@ -45,6 +52,10 @@ const drawPrinciple = (principle, levels, columnOffset = 0) => {
     guidelineCell.style.setProperty("grid-row", "2");
 
     guidelineCell.classList.remove("hide");
+    
+    if (!quizGuidelines) {
+      guidelineCell.classList.add("correct");
+    }
   });
 
   const scRows = Array(guidelineCells.length).fill(3);
@@ -98,17 +109,18 @@ setupButton.addEventListener("click", (event) => {
 
   const levels = translateLevels(levelsSelect.value);
   const principles = translatePrinciples(principlesSelect.value);
+  const quizGuidelines = quizGuidelinesCheck.checked;
 
   if (principles.length === 1) {
-    drawPrinciple(principles[0], levels);
+    drawPrinciple(principles[0], levels, quizGuidelines);
   } else {
-    drawPrinciple(1, levels, 0);
-    drawPrinciple(2, levels, 5);
-    drawPrinciple(3, levels, 11);
-    drawPrinciple(4, levels, 15);
+    drawPrinciple(1, levels, quizGuidelines, 0);
+    drawPrinciple(2, levels, quizGuidelines, 5);
+    drawPrinciple(3, levels, quizGuidelines, 11);
+    drawPrinciple(4, levels, quizGuidelines, 15);
   }
 
-  questions.shuffle(principles, levels);
+  questions.shuffle(principles, levels, quizGuidelines);
 
   setupForm.classList.add("hide");
 
